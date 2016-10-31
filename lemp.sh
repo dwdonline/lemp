@@ -191,8 +191,13 @@ then
     
     wget -q https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/default.conf
 
+read -p "Is this Magento 1? Answer No for Magento 2. <y/N> " prompt
+if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
+then
     wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/sites-available/magento.conf
-    
+else
+    wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/sites-available/magento2.conf
+fi
     sed -i "s/example.com/${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s/www.example.com/www.${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,root /var/www/html,root ${MY_SITE_PATH},g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
@@ -266,7 +271,13 @@ then
 
 cd "${MY_SITE_PATH}"
 
+read -p "Is this Magento 1? Answer No for Magento 2. <y/N> " prompt
+if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
+then
 wget -qO  "https://docs.google.com/uc?export=download&confirm=f7el&id=0B9WPON9sDtVkQlpxdHhMOVVKQzQ"
+else
+echo "You will need to install Magento 2 afterwards. The database will be setup however."
+fi
 
 echo "Let's setup the database"
 read -e -p "---> What do you want to name your Magento MySQL database?: " -i "" MAGENTO_MYSQL_DATABASE
