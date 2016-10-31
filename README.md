@@ -3,12 +3,19 @@ LEMP Install for Magento and WordPress
 This script is meant to be run on a fresh Ubuntu server with 14,15, or 16.
 
 It will:
+
 1. Update the server.
+
 2. Install with Pagespeed.
+
 3. Install Php5-fpm 7.
+
 4. Install Percona (MySQL) 5.7.
+
 5. Configure the server configurations for Magento and/or WordPress.
+
 6. Install Magento and/or WordPress and create their databases (have to run the web installer after), setting up their files and MySQL databases.
+
 7. Install a Let's Encrypt SSL. https://letsencrypt.org/
 
 
