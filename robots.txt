@@ -1,0 +1,35 @@
+User-agent: *
+
+Disallow: /comment-page-
+Disallow: /feed/
+Disallow: /trackback/
+Disallow: /license.txt
+Disallow: /readme.html
+Disallow: /xmlrpc.php
+Disallow: /*.php$
+Disallow: /?s=*
+
+Disallow: /home/
+Disallow: /checkout/
+Disallow: /contacts/
+Disallow: /sendfriend/
+Disallow: /downloader/
+Disallow: /catalog/product_compare/
+Disallow: /pkginfo/
+Disallow: /report/
+Disallow: /stats/
+Disallow: /wishlist/
+
+Disallow: /control/
+Disallow: /cgi-bin/
+Disallow: /shell/
+Disallow: /skin/
+
+Disallow: /cron.php
+Disallow: /cron.sh
+Disallow: /install.php
+Disallow: /LICENSE.html
+Disallow: /LICENSE.txt
+Disallow: /LICENSE_AFL.txt
+
+Sitemap: http://YOUR-DOMAIN.com/sitemap_index.xml
