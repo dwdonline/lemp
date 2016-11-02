@@ -69,7 +69,7 @@ wget -q https://github.com/pagespeed/ngx_pagespeed/archive/master.zip
 unzip master.zip
 cd ngx_pagespeed-master
 wget -q https://dl.google.com/dl/page-speed/psol/1.11.33.4.tar.gz
-tar -xzvf 1.11.33.3.tar.gz # expands to psol/
+tar -xzvf 1.11.33.4.tar.gz # expands to psol/
 cd
 wget -q http://nginx.org/download/nginx-1.11.5.tar.gz
 tar -xzvf nginx-1.11.5.tar.gz
