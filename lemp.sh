@@ -171,7 +171,7 @@ then
     wget -qO  /etc/nginx/conf.d/gzip.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/gzip.conf
     wget -qO  /etc/nginx/conf.d/http.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/http.conf
     wget -qO  /etc/nginx/conf.d/limits.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/limits.conf
-    wget -qO  /etc/nginx/conf.d/mime-types.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/mime-types.conf
+    wget -qO  /etc/nginx/conf.d/mime_types.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/mime_types.conf
     wget -qO  /etc/nginx/conf.d/security.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/security.conf
     wget -qO  /etc/nginx/conf.d/ssl.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/ssl.conf
     wget -qO  /etc/nginx/conf.d/static-files.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/static-files.conf
@@ -194,7 +194,7 @@ then
 read -p "Is this Magento 1? Answer No for Magento 2. <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
-    wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/sites-available/magento.conf
+    wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/magento.conf
 else
     wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/sites-available/magento2.conf
 fi
@@ -300,11 +300,17 @@ read -p "Would you like to install WordPress now? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
 
+echo
+read -e -p "---> What do you want your WordPress directory to be. If this will be at the root enter the same as your root ${MY_SITE_PATH} or if it will be for Magento wp:" -i "wp" WP_DIRECTORY
+read -e -p "---> What do you want to name your WordPress MySQL database?: " -i "" WP_MYSQL_DATABASE
+read -e -p "---> What do you want to name your WordPress MySQL user?: " -i "" WP_MYSQL_USER
+read -e -p "---> What do you want your WordPress MySQL password to be?: " -i "" WP_MYSQL_USER_PASSWORD
+
 cd "${MY_SITE_PATH}"
 
-mkdir wp
+mkdir ${WP_DIRECTORY}
 
-cd wp
+cd ${WP_DIRECTORY}
 
 wget -q https://wordpress.org/latest.zip
 
@@ -315,12 +321,6 @@ unzip latest.zip
 cd wordpress
 
 mv * .htaccess ../
-
-echo
-read -e -p "---> What do you want to name your WordPress MySQL database?: " -i "" WP_MYSQL_DATABASE
-read -e -p "---> What do you want to name your WordPress MySQL user?: " -i "" WP_MYSQL_USER
-read -e -p "---> What do you want your WordPress MySQL password to be?: " -i "" WP_MYSQL_USER_PASSWORD
-
 
 echo "Please enter your MySQL root password below:"
 
@@ -377,8 +377,10 @@ find var/ -type f -exec chmod 600 {} \;
 find media/ -type f -exec chmod 600 {} \;
 find var/ -type d -exec chmod 700 {} \; 
 find media/ -type d -exec chmod 700 {} \;
-find ${MY_SITE_PATH}/wp-content/ -type f -exec chmod 600 {} \; 
-find ${MY_SITE_PATH}/wp-content/ -type d -exec chmod 700 {} \;
+
+cd ${WP_DIRECTORY}
+find ${MY_SITE_PATH}/${WP_DIRECTORY}/wp-content/ -type f -exec chmod 600 {} \; 
+find ${MY_SITE_PATH}/${WP_DIRECTORY}/wp-content/ -type d -exec chmod 700 {} \;
 chmod 700 includes
 chmod 600 includes/config.php
 
