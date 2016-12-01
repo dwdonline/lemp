@@ -222,13 +222,13 @@ then
     mkdir -p wordpress
     cd wordpress
     
-    wget -qO  /etc/nginx/conf.d/yoast.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/wordpress/yoast.conf
-    wget -qO  /etc/nginx/conf.d/wordfence.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/wordpress/wordfence.conf
+    wget -qO  /etc/nginx/wordpress/yoast.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/wordpress/yoast.conf
+    wget -qO  /etc/nginx/wordpress/wordfence.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/wordpress/wordfence.conf
     
     cd /etc/nginx
         
-    sed -i "s,#	include wordpress/yoast.conf,	include wordpress/yoast.conf,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
-    sed -i "s,#	include wordpress/wordfence.conf,	include wordpress/wordfence.conf,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,#	include wordpress/yoast.conf;,	include wordpress/yoast.conf;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,#	include wordpress/wordfence.conf;,	include wordpress/wordfence.conf;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
 
 else
     echo "You just skipped installing WordPress host files."
