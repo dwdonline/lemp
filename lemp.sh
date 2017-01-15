@@ -9,15 +9,17 @@ pause(){
 
 echo "---> WELCOME! FIRST WE NEED TO MAKE SURE THE SYSTEM IS UP TO DATE!"
 
-read -p "Would you like to install updates now? <y/N> " prompt
-if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
-then
+read -p "Would you like to install updates now? <y/N> " choice
+case "$choice" in 
+  y|Y|Yes|yes|YES ) 
 apt-get update
 apt-get -y upgrade
-
-else
+;;
+  n|N|No|no|NO )
 echo "Ok, we won't update the system first. This may cause issues if you have a really old system."
-fi
+;;
+  * ) echo "invalid";;
+esac
 
 echo "---> Now, we'll install build-essentials and zip/unzip."
 pause
@@ -201,17 +203,18 @@ pause
     
     wget -q https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/default.conf
 
-read -p "Is this Magento 1? Answer No for Magento 2. <y/N> " prompt
-if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" || $prompt == "1" ]]
-then
+read -p "Is this Magento 1? Answer No for Magento 2. <y/N> " choice
+case "$choice" in 
+  y|Y|Yes|yes|YES ) 
     wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/magento.conf
-if [[ $prompt == "n" || $prompt == "N" || $prompt == "no" || $prompt == "No" || $prompt == "2" ]]
-then
+;;
+  n|N|No|no|NO )
     wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/sites-available/magento2.conf
-else
-    wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/magento.conf
-fi
-    sed -i "s/example.com/${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+;;
+  * ) echo "invalid choice";;
+esac
+
+sed -i "s/example.com/${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s/www.example.com/www.${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,root /var/www/html,root ${MY_SITE_PATH},g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,user  www-data,user  ${MY_WEB_USER},g" /etc/nginx/nginx.conf
@@ -223,9 +226,9 @@ fi
     ln -s /etc/nginx/sites-available/${MY_DOMAIN}.conf /etc/nginx/sites-enabled/${MY_DOMAIN}.conf
     ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
 
-read -p "Would you like to setup the host files for WordPress? <y/N> " prompt
-if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
-then
+read -p "Would you like to setup the host files for WordPress? <y/N> " choice
+case "$choice" in 
+  y|Y|Yes|yes|YES ) 
 
     cd /etc/nginx
     mkdir -p wordpress
@@ -238,10 +241,13 @@ then
         
     sed -i "s,#	include wordpress/yoast.conf;,	include wordpress/yoast.conf;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,#	include wordpress/wordfence.conf;,	include wordpress/wordfence.conf;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
-
-else
+    
+;;
+  n|N|No|no|NO )
     echo "You just skipped installing WordPress host files."
-fi
+;;
+  * ) echo "invalid choice";;
+esac
 
 #Create host root
 cd
@@ -254,14 +260,17 @@ cp -r ".well-known" ${MY_SITE_PATH}
 #Move to site root
 cd ${MY_SITE_PATH}
 
-read -p "Would you like to install Adminer for managing your MySQL databases now? <y/N> " prompt
-if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
-then
+read -p "Would you like to install Adminer for managing your MySQL databases now? <y/N> " choice
+case "$choice" in 
+  y|Y|Yes|yes|YES ) 
     wget -q https://www.adminer.org/static/download/4.2.5/adminer-4.2.5-mysql.php
     mv adminer-4.2.5-mysql.php adminer.php
-else
+;;
+  n|N|No|no|NO )
     echo "You chose not to install Adminer."
-fi
+;;
+  * ) echo "invalid choice";;
+esac
 
 echo "---> Let's remove sendmail and install Postfix to handle sending mail:"
 pause
@@ -274,19 +283,11 @@ debconf-set-selections <<< "postfix postfix/mailname string ${POSTFIX_SERVER}"
 debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
 apt-get install -y postfix
 
-read -p "Would you like to install Magento now? <y/N> " prompt
-if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
-then
+read -p "Would you like to install Magento now? <y/N> " choice
+case "$choice" in 
+  y|Y|Yes|yes|YES ) 
 
-cd "${MY_SITE_PATH}"
-
-read -p "Is this Magento 1? Answer No for Magento 2. <y/N> " prompt
-if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
-then
-wget -qO  "https://docs.google.com/uc?export=download&confirm=f7el&id=0B9WPON9sDtVkQlpxdHhMOVVKQzQ"
-else
-echo "You will need to install Magento 2 afterwards. The database will be setup however."
-fi
+echo "You will need to install Magento afterwards. The database will be setup however." pause
 
 echo "Let's setup the database"
 read -e -p "---> What do you want to name your Magento MySQL database?: " -i "" MAGENTO_MYSQL_DATABASE
@@ -301,14 +302,17 @@ echo "Your database name is: ${MAGENTO_MYSQL_DATABASE}"
 echo "Your database user is: ${MAGENTO_MYSQL_USER}"
 echo "Your databse password is: ${MAGENTO_MYSQL_USER_PASSWORD}"
 
-else
-    echo "You didn't want to install Magento I guess. It kinda defeats the purpose of this script."
-fi
+;;
+  n|N|No|no|NO )
 
-read -p "Would you like to install WordPress now? <y/N> " prompt
-if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
-then
+    echo "You didn't want to install Magento I guess. It kinda defeats the purpose of this script, unless you are installing WordPress."
+;;
+  * ) echo "invalid choice";;
+esac
 
+read -p "Would you like to install WordPress now? <y/N> " choice
+case "$choice" in 
+  y|Y|Yes|yes|YES ) 
 echo
 read -e -p "---> What do you want your WordPress directory to be. If this will be at the root enter the same as your root ${MY_SITE_PATH} or if it will be for Magento wp:" -i "wp" WP_DIRECTORY
 read -e -p "---> What do you want to name your WordPress MySQL database?: " -i "" WP_MYSQL_DATABASE
@@ -359,10 +363,13 @@ perl -i -pe'
   s/put your unique phrase here/salt()/ge
 ' wp-config.php
 
-else
+;;
+  n|N|No|no|NO )
     echo "You didn't install WordPress."
     service mysql restart
-fi
+;;
+  * ) echo "invalid choice";;
+esac
 
 echo "---> Let's add a robots.txt file:"
 wget -qO ${MY_SITE_PATH}/robots.txt https://raw.githubusercontent.com/dwdonline/lemp/master/robots.txt
