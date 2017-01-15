@@ -68,9 +68,13 @@ cd
 service nginx stop
 pkill nginx
 
+apt-get install libxslt-dev libpam0g-dev -y
+
+mkdir nginx_install
+
 read -e -p "---> What version of Pagespeed do you want to use?: " -i "1.12.34.2" NPS_VERSION
 
-cd
+cd /root/nginx_install
 
 wget https://github.com/pagespeed/ngx_pagespeed/archive/v${NPS_VERSION}-beta.zip
 unzip v${NPS_VERSION}-beta.zip
@@ -81,12 +85,37 @@ psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz
 wget ${psol_url}
 tar -xzvf $(basename ${psol_url})  # extracts to psol/
 
-cd
+cd /root/nginx_install
+wget https://github.com/sto/ngx_http_auth_pam_module/archive/master.zip
+unzip master.zip
+rm master.zip
+
+cd /root/nginx_install
+wget https://github.com/arut/nginx-dav-ext-module/archive/master.zip
+unzip master.zip
+rm master.zip
+
+cd /root/nginx_install
+wget https://github.com/openresty/echo-nginx-module/archive/master.zip
+unzip master.zip
+rm master.zip
+
+cd /root/nginx_install
+wget https://github.com/itoffshore/nginx-upstream-fair/archive/master.zip
+unzip master.zip
+rm master.zip
+
+cd /root/nginx_install
+wget https://github.com/yaoweibin/ngx_http_substitutions_filter_module/archive/master.zip
+unzip master.zip
+rm master.zip
+
+cd /root/nginx_install
 wget -q http://nginx.org/download/nginx-1.11.8.tar.gz
 tar -xzvf nginx-1.11.8.tar.gz
 cd nginx-1.11.8
 
-./configure --prefix=/usr/share/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/run/nginx.pid --lock-path=/run/lock/subsys/nginx --with-http_stub_status_module --user=www-data --group=www-data --with-http_ssl_module --with-http_v2_module --with-http_gzip_static_module --with-http_image_filter_module --add-module=$HOME/ngx_pagespeed-${NPS_VERSION}-beta --with-http_geoip_module --with-http_realip_module;
+./configure --user=www-data --group=www-data --with-cc-opt='-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2' --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now' --prefix=/usr/share/nginx --conf-path=/etc/nginx/nginx.conf --http-log-path=/var/log/nginx/access.log --error-log-path=/var/log/nginx/error.log --lock-path=/var/lock/nginx.lock --pid-path=/run/nginx.pid --modules-path=/usr/lib/nginx/modules --http-client-body-temp-path=/var/lib/nginx/body --http-fastcgi-temp-path=/var/lib/nginx/fastcgi --http-proxy-temp-path=/var/lib/nginx/proxy --http-scgi-temp-path=/var/lib/nginx/scgi --http-uwsgi-temp-path=/var/lib/nginx/uwsgi --with-debug --with-pcre-jit --with-http_ssl_module --with-http_stub_status_module --with-http_realip_module --with-http_auth_request_module --with-http_v2_module --with-http_dav_module --with-http_slice_module --with-threads --with-http_addition_module --with-http_geoip_module=dynamic --with-http_gunzip_module --with-http_gzip_static_module --with-http_image_filter_module=dynamic --with-http_sub_module --with-http_xslt_module=dynamic --with-stream=dynamic --with-stream_ssl_module --with-mail=dynamic --with-mail_ssl_module --add-dynamic-module=$HOME/nginx_install/ngx_http_auth_pam_module-master --add-module=$HOME/nginx_install/nginx-dav-ext-module-master --add-dynamic-module=$HOME/nginx_install/echo-nginx-module-master --add-module=$HOME/nginx_install/nginx-upstream-fair-master --add-dynamic-module=$HOME/nginx_install/ngx_http_substitutions_filter_module-master --add-module=$HOME/nginx_install/ngx_pagespeed-${NPS_VERSION}-beta;
 
 make
 
