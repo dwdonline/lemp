@@ -33,11 +33,14 @@ pause
 read -e -p "---> What would you like your new admin user to be?: " -i "" NEW_ADMIN
 read -e -p "---> What should the new admin password be?: " -i "" NEW_ADMIN_PASSWORD
 read -e -p "---> What should we make the SSH port?: " -i "" NEW_SSH_PORT
+read -e -p "---> Enter your web user usually www-data (nginx for Centos): " -i "www-data" MY_WEB_USER
 
 adduser ${NEW_ADMIN} --disabled-password --gecos ""
 echo "${NEW_ADMIN}:${NEW_ADMIN_PASSWORD}"|chpasswd
 
 gpasswd -a ${NEW_ADMIN} sudo
+
+sudo usermod -a -G ${MY_WEB_USER} ${NEW_ADMIN}
 
 sed -i "s,PermitRootLogin yes,PermitRootLogin no,g" /etc/ssh/sshd_config
 
@@ -161,9 +164,7 @@ read -p "Would you like to setup the host files for Magento? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
 
-    read -e -p "---> Enter your web root path: " -i "/var/www/html" MY_SITE_PATH
-    read -e -p "---> Enter your web user usually www-data (nginx for Centos): " -i "www-data" MY_WEB_USER
-    
+    read -e -p "---> Enter your web root path: " -i "/var/www/html" MY_SITE_PATH    
     cd /etc/nginx/conf.d
 
     wget -qO  /etc/nginx/conf.d/pagespeed.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/pagespeed.conf
@@ -385,6 +386,12 @@ chmod 700 includes
 chmod 600 includes/config.php
 
 chown -R www-data.www-data wp-content
+
+sudo chgrp -R ${MY_WEB_USER} ${MY_SITE_PATH}
+
+sudo chmod -R g+w ${MY_SITE_PATH}
+
+sudo chmod g+s ${MY_SITE_PATH}
 
 echo "---> Let;s cleanup:"
 pause
