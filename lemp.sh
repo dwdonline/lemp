@@ -68,17 +68,25 @@ cd
 service nginx stop
 pkill nginx
 
-wget -q https://github.com/pagespeed/ngx_pagespeed/archive/master.zip
-unzip master.zip
-cd ngx_pagespeed-master
-wget -q https://dl.google.com/dl/page-speed/psol/1.11.33.4.tar.gz
-tar -xzvf 1.11.33.4.tar.gz # expands to psol/
-cd
-wget -q http://nginx.org/download/nginx-1.11.5.tar.gz
-tar -xzvf nginx-1.11.5.tar.gz
-cd nginx-1.11.5
+read -e -p "---> What version of Pagespeed do you want to use?: " -i "1.12.34.2" NPS_VERSION
 
-./configure --prefix=/usr/share/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/run/nginx.pid --lock-path=/run/lock/subsys/nginx --with-http_stub_status_module --user=www-data --group=www-data --with-http_ssl_module --with-http_v2_module --with-http_gzip_static_module --with-http_image_filter_module --add-module=$HOME/ngx_pagespeed-master --with-http_geoip_module --with-http_realip_module;
+cd
+
+wget https://github.com/pagespeed/ngx_pagespeed/archive/v${NPS_VERSION}-beta.zip
+unzip v${NPS_VERSION}-beta.zip
+
+cd ngx_pagespeed-${NPS_VERSION}-beta/
+psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz
+[ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
+wget ${psol_url}
+tar -xzvf $(basename ${psol_url})  # extracts to psol/
+
+cd
+wget -q http://nginx.org/download/nginx-1.11.8.tar.gz
+tar -xzvf nginx-1.11.8.tar.gz
+cd nginx-1.11.8
+
+./configure --prefix=/usr/share/nginx --sbin-path=/usr/sbin/nginx --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --pid-path=/run/nginx.pid --lock-path=/run/lock/subsys/nginx --with-http_stub_status_module --user=www-data --group=www-data --with-http_ssl_module --with-http_v2_module --with-http_gzip_static_module --with-http_image_filter_module --add-module=$HOME/ngx_pagespeed-${NPS_VERSION}-beta --with-http_geoip_module --with-http_realip_module;
 
 make
 
@@ -160,7 +168,7 @@ cd
 
 echo "---> OK, WE ARE DONE SETTING UP THE SERVER. LET'S PROCEED TO CONFIGURING THE NGINX HOST FILES."
 
-read -p "Would you like to setup the host files for Magento? <y/N> " prompt
+read -p "Would you like to setup the basic host files? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
 
@@ -191,6 +199,7 @@ then
     cd /etc/nginx/sites-available
     
     wget -q https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/default.conf
+fi
 
 read -p "Is this Magento 1? Answer No for Magento 2. <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
