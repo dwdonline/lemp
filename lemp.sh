@@ -253,10 +253,6 @@ esac
 cd
 mkdir -p ${MY_SITE_PATH}
 
-#Copy verification folder for SSL
-cd "/var/www/html"
-cp -r ".well-known" ${MY_SITE_PATH}
-
 #Move to site root
 cd ${MY_SITE_PATH}
 
