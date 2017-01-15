@@ -172,10 +172,7 @@ cd
 
 echo "---> OK, WE ARE DONE SETTING UP THE SERVER. LET'S PROCEED TO CONFIGURING THE NGINX HOST FILES."
 
-read -p "Would you like to setup the basic host files? <y/N> " prompt
-if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
-then
-
+pause
     read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH    
     cd /etc/nginx/conf.d
 
@@ -203,14 +200,16 @@ then
     cd /etc/nginx/sites-available
     
     wget -q https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/default.conf
-fi
 
 read -p "Is this Magento 1? Answer No for Magento 2. <y/N> " prompt
-if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
+if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" || $prompt == "1" ]]
 then
     wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/magento.conf
-else
+if [[ $prompt == "n" || $prompt == "N" || $prompt == "no" || $prompt == "No" || $prompt == "2" ]]
+then
     wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/sites-available/magento2.conf
+else
+    wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/magento.conf
 fi
     sed -i "s/example.com/${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s/www.example.com/www.${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
@@ -223,10 +222,6 @@ fi
 
     ln -s /etc/nginx/sites-available/${MY_DOMAIN}.conf /etc/nginx/sites-enabled/${MY_DOMAIN}.conf
     ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
-
-else
-    echo "You just skipped installing the host files for Magento."
-fi
 
 read -p "Would you like to setup the host files for WordPress? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
