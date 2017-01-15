@@ -136,6 +136,8 @@ read -e -p "---> What is your city? - ie: Los Angeles: " -i "Los Angeles" MY_CIT
 read -e -p "---> What is your company - ie: Deatherage Co: " -i "" MY_O
 read -e -p "---> What is your departyment - ie: IT (Can be blank): " -i "" MY_OU
 
+mkdir -p /etc/ssl/sites/
+
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/sites/selfsigned.key -out /etc/ssl/sites/selfsigned.crt -subj "/C=${MY_COUNTRY}/ST=${MY_REGION}/L=${MY_CITY}/O=${MY_O}/OU=${MY_OU}/CN=${MY_DOMAIN}"
 
 openssl dhparam -out /etc/ssl/dhparams.pem 2048
@@ -372,38 +374,28 @@ echo "---> Let's add a robots.txt file:"
 wget -qO ${MY_SITE_PATH}/robots.txt https://raw.githubusercontent.com/dwdonline/lemp/master/robots.txt
 sed -i "s,Sitemap: http://YOUR-DOMAIN.com/sitemap_index.xml,Sitemap: https://www.${MY_DOMAIN}/sitemap_index.xml,g" ${MY_SITE_PATH}/robots.txt
 
-
-echo "---> Let's set the permissions for Magento and WordPress:"
+echo "---> Let's set the permissions for the site:"
 pause
 
 echo "Lovely, this may take a few minutes. Dont fret."
 
 cd "${MY_SITE_PATH}"
 
-chown -R ${NEW_ADMIN}.www-data *
+chown -R ${NEW_ADMIN}.www-data ${MY_SITE_PATH}
+
+chown -R ${NEW_ADMIN}.www-data /var/www
 
 chown -R ${NEW_ADMIN}.www-data robots.txt
 
-find . -type f -exec chmod 400 {} \;
-find . -type d -exec chmod 500 {} \; 
-find var/ -type f -exec chmod 600 {} \; 
-find media/ -type f -exec chmod 600 {} \;
-find var/ -type d -exec chmod 700 {} \; 
-find media/ -type d -exec chmod 700 {} \;
-
 cd ${WP_DIRECTORY}
-find ${MY_SITE_PATH}/${WP_DIRECTORY}/wp-content/ -type f -exec chmod 600 {} \; 
-find ${MY_SITE_PATH}/${WP_DIRECTORY}/wp-content/ -type d -exec chmod 700 {} \;
-chmod 700 includes
-chmod 600 includes/config.php
+find ${WP_DIRECTORY}/wp-content/ -type f -exec chmod 600 {} \; 
+find ${WP_DIRECTORY}/wp-content/ -type d -exec chmod 700 {} \;
+chmod 700 wp-includes
+chmod 600 wp-config.php
 
 chown -R www-data.www-data wp-content
 
-sudo chgrp -R ${MY_WEB_USER} ${MY_SITE_PATH}
-
-sudo chmod -R g+w ${MY_SITE_PATH}
-
-sudo chmod g+s ${MY_SITE_PATH}
+sudo chmod -R 775 ${MY_SITE_PATH}
 
 echo "---> Let;s cleanup:"
 pause
