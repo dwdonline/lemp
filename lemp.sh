@@ -126,42 +126,17 @@ service nginx restart
 echo "---> NOW, LET'S SETUP SSL."
 pause
 
-sudo apt-get -y install letsencrypt
-
 echo
-read -e -p "---> What will your main domain be - ie: domain.com: " -i "" MY_DOMAIN
-read -e -p "---> Any additional domain name(s) seperated: domain.com, dev.domain.com: " -i "www.${MY_DOMAIN}" MY_DOMAINS
+read -e -p "---> What will your main domain be - ie: domain.com (without the www): " -i "" MY_DOMAIN
+read -e -p "---> What is the 2 letter country? - ie: US: " -i "US" MY_COUNTRY
+read -e -p "---> What is your state/province? - ie: California: " -i "California" MY_REGION
+read -e -p "---> What is your city? - ie: Los Angeles: " -i "Los Angeles" MY_CITY
+read -e -p "---> What is your company - ie: Deatherage Co: " -i "" MY_O
+read -e -p "---> What is your departyment - ie: IT (Can be blank): " -i "" MY_OU
 
-#cd /etc/ssl/
-cd
-
-export DOMAINS="${MY_DOMAIN},www.${MY_DOMAIN},${MY_DOMAINS}"
-export DIR=/var/www/html
-sudo letsencrypt certonly -a webroot --webroot-path=$DIR -d $DOMAINS
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/sites/selfsigned.key -out /etc/ssl/sites/selfsigned.crt -subj "/C=${MY_COUNTRY}/ST=${MY_REGION}/L=${MY_CITY}/O=${MY_O}/OU=${MY_OU}/CN=${MY_DOMAIN}"
 
 openssl dhparam -out /etc/ssl/dhparams.pem 2048
-
-echo "---> NOW, LET'S SETUP SSL to renew every 60 days."
-pause
-
-cd
-
-cat > renewCerts.sh <<EOF
-#!/bin/sh
-# This script renews all the Let's Encrypt certificates with a validity < 30 days
-
-if ! letsencrypt renew > /var/log/letsencrypt/renew.log 2>&1 ; then
-    echo Automated renewal failed:
-    cat /var/log/letsencrypt/renew.log
-    exit 1
-fi
-nginx -t && nginx -s reload
-EOF
-
-#Add cronjob for renewing ssl
-(crontab -l 2>/dev/null; echo "@daily /root/renewCerts.sh") | crontab -
-
-chmod +x /root/renewCerts.sh
 
 echo "---> INSTALLING PERCONA"
 pause
@@ -241,8 +216,8 @@ fi
     sed -i "s/www.example.com/www.${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,root /var/www/html,root ${MY_SITE_PATH},g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,user  www-data,user  ${MY_WEB_USER},g" /etc/nginx/nginx.conf
-    sed -i "s,ssl_certificate_name,ssl_certificate  /etc/letsencrypt/live/${MY_DOMAIN}/fullchain.pem;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
-    sed -i "s,ssl_certificate_key,ssl_certificate_key /etc/letsencrypt/live/${MY_DOMAIN}/privkey.pem;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,ssl_certificate_name,ssl_certificate  /etc/ssl/sites/selfsigned.crt;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,ssl_certificate_key,ssl_certificate_key /etc/ssl/sites/selfsigned.key;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,access_log,access_log /var/log/nginx/${MY_DOMAIN}_access.log;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,error_log,error_log /var/log/nginx/${MY_DOMAIN}_error.log;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
 
