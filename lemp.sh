@@ -310,26 +310,26 @@ read -p "Would you like to install WordPress now? <y/N> " choice
 case "$choice" in 
   y|Y|Yes|yes|YES ) 
 echo
-read -e -p "---> What do you want your WordPress directory to be. If this will be at the root enter the same as your root ${MY_SITE_PATH} or if it will be for Magento wp:" -i "wp" WP_DIRECTORY
 read -e -p "---> What do you want to name your WordPress MySQL database?: " -i "" WP_MYSQL_DATABASE
 read -e -p "---> What do you want to name your WordPress MySQL user?: " -i "" WP_MYSQL_USER
 read -e -p "---> What do you want your WordPress MySQL password to be?: " -i "" WP_MYSQL_USER_PASSWORD
+read -e -p "---> What do you want your WordPress directory to be. If this will be at the root enter the same as your root ${MY_SITE_PATH} or if it will be for Magento wp:" -i "${MY_SITE_PATH}/wp" WP_DIRECTORY
 
 cd "${MY_SITE_PATH}"
 
-mkdir ${WP_DIRECTORY}
+mkdir -p ${WP_DIRECTORY}
 
-cd ${WP_DIRECTORY}
+cd "${WP_DIRECTORY}"
+
+MY_WP_SITE_PATH="${WP_DIRECTORY}"
 
 wget -q https://wordpress.org/latest.zip
 
 unzip latest.zip
 
-#mv wordpress blog
-
 cd wordpress
 
-mv * .htaccess ../
+mv * ../
 
 echo "Please enter your MySQL root password below:"
 
@@ -341,13 +341,14 @@ echo "Your databse password is: ${WP_MYSQL_USER_PASSWORD}"
 
 service mysql restart
 
-cd "${MY_SITE_PATH}"
+cd "${MY_WP_SITE_PATH}"
 
 cp -r wp-config-sample.php wp-config.php
 
 sed -i "s,database_name_here,${WP_MYSQL_DATABASE},g" wp-config.php
 sed -i "s,username_here,${WP_MYSQL_USER},g" wp-config.php
 sed -i "s,password_here,${WP_MYSQL_USER_PASSWORD},g" wp-config.php
+
 
 #set WP salts
 perl -i -pe'
@@ -361,7 +362,7 @@ perl -i -pe'
 
 ;;
   n|N|No|no|NO )
-    echo "You didn't install WordPress."
+    echo "You didn\'t install WordPress."
     service mysql restart
 ;;
   * ) echo "invalid choice";;
