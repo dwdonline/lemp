@@ -176,7 +176,7 @@ read -p "Would you like to setup the basic host files? <y/N> " prompt
 if [[ $prompt == "y" || $prompt == "Y" || $prompt == "yes" || $prompt == "Yes" ]]
 then
 
-    read -e -p "---> Enter your web root path: " -i "/var/www/html" MY_SITE_PATH    
+    read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH    
     cd /etc/nginx/conf.d
 
     wget -qO  /etc/nginx/conf.d/pagespeed.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/pagespeed.conf
