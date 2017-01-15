@@ -16,7 +16,7 @@ It will:
 
 6. Install Magento and/or WordPress and create their databases (have to run the web installer after), setting up their files and MySQL databases.
 
-7. Install a Let's Encrypt SSL. https://letsencrypt.org/
+7. Install a Let's Encrypt SSL. https://letsencrypt.org/. Note, this has been moved to a different script.
 
 
 
