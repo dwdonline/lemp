@@ -63,7 +63,7 @@ pause
 
 cd
 
-apt-get autoremove nginx*
+apt-get autoremove nginx* -y
 
 apt-get install libxslt-dev gcc nginx-common nginx-extras -y
 
