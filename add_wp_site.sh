@@ -121,8 +121,6 @@ MY_SSL_KEY="/etc/ssl/sites/${MY_DOMAIN}_selfsigned.key"
   * ) echo "invalid";;
 esac
 
-openssl dhparam -out /etc/ssl/dhparams.pem 2048
-
     sed -i "s,listen 80,listen 443 http2 ssl;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,#listen80,listen  80;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,#servername,server_name  ${MY_DOMAIN} www.${MY_DOMAIN};,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
