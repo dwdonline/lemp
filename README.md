@@ -32,3 +32,13 @@ wget -q https://raw.githubusercontent.com/dwdonline/lemp/master/lemp.sh
 chmod 550 lemp.sh
 
 ./lemp.sh
+
+
+To add a WordPress site:
+cd
+
+wget -q https://raw.githubusercontent.com/dwdonline/lemp/master/add_wp_site.sh
+
+chmod 550 add_wp_site.sh
+
+./add_wp_site.sh
