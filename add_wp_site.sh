@@ -11,6 +11,13 @@ echo "---> WELCOME! FIRST WE NEED TO MAKE SURE THE SYSTEM IS UP TO DATE!"
 
 read -e -p "---> What is your main admin user?: " -i "" NEW_ADMIN
 
+echo
+read -e -p "---> What will your main domain be - ie: domain.com: " -i "" MY_DOMAIN
+
+read -e -p "---> Any additional domain name(s) seperated: domain.com, dev.domain.com: " -i "www.${MY_DOMAIN}" MY_DOMAINS
+
+read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH
+
 read -p "Would you like to install updates now? <y/N> " choice
 case "$choice" in 
   y|Y|Yes|yes|YES ) 
@@ -29,16 +36,12 @@ pause
 read -p "Do you want to use Let's Encrypt? <y/N> " choice
 case "$choice" in 
   y|Y|Yes|yes|YES ) 
-
-echo
-read -e -p "---> What will your main domain be - ie: domain.com: " -i "" MY_DOMAIN
-read -e -p "---> Any additional domain name(s) seperated: domain.com, dev.domain.com: " -i "www.${MY_DOMAIN}" MY_DOMAINS
-
 #cd /etc/ssl/
 cd
 
 export DOMAINS="${MY_DOMAIN},www.${MY_DOMAIN},${MY_DOMAINS}"
-export DIR=/var/www/html
+export DIR="${MY_SITE_PATH}"
+
 sudo letsencrypt certonly -a webroot --webroot-path=$DIR -d $DOMAINS
 
 openssl dhparam -out /etc/ssl/dhparams.pem 2048
@@ -73,7 +76,6 @@ MY_SSL_KEY="/etc/letsencrypt/live/${MY_DOMAIN}/privkey.pem"
 echo "OK, we will install a self-signed SSL then."
 
 echo
-read -e -p "---> What will your main domain be - ie: domain.com (without the www): " -i "" MY_DOMAIN
 read -e -p "---> What is the 2 letter country? - ie: US: " -i "US" MY_COUNTRY
 read -e -p "---> What is your state/province? - ie: California: " -i "California" MY_REGION
 read -e -p "---> What is your city? - ie: Los Angeles: " -i "Los Angeles" MY_CITY
@@ -94,8 +96,6 @@ esac
 openssl dhparam -out /etc/ssl/dhparams.pem 2048
 
 pause
-
-    read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH
     
     cd /etc/nginx/sites-available
     
