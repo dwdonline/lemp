@@ -8,16 +8,7 @@ pause(){
 }
 
 echo "---> WELCOME! FIRST WE NEED TO MAKE SURE THE SYSTEM IS UP TO DATE!"
-
-read -e -p "---> What is your main admin user?: " -i "" NEW_ADMIN
-
-echo
-read -e -p "---> What will your main domain be - ie: domain.com: " -i "" MY_DOMAIN
-
-read -e -p "---> Any additional domain name(s) seperated: domain.com, dev.domain.com: " -i "www.${MY_DOMAIN}" MY_DOMAINS
-
-read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH
-
+pause
 read -p "Would you like to install updates now? <y/N> " choice
 case "$choice" in 
   y|Y|Yes|yes|YES ) 
@@ -29,6 +20,19 @@ echo "Ok, we won't update the system first. This may cause issues if you have a 
 ;;
   * ) echo "invalid";;
 esac
+
+read -e -p "---> What is your main admin user?: " -i "" NEW_ADMIN
+
+echo
+read -e -p "---> What will your main domain be - ie: domain.com: " -i "" MY_DOMAIN
+
+read -e -p "---> Any additional domain name(s) seperated: domain.com, dev.domain.com: " -i "www.${MY_DOMAIN}" MY_DOMAINS
+
+read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH
+
+#Create host root
+cd
+mkdir -p ${MY_SITE_PATH}
 
 echo "---> NOW, LET'S SETUP SSL."
 pause
@@ -114,10 +118,6 @@ pause
         
     sed -i "s,#	include wordpress/yoast.conf;,	include wordpress/yoast.conf;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,#	include wordpress/wordfence.conf;,	include wordpress/wordfence.conf;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
-    
-#Create host root
-cd
-mkdir -p ${MY_SITE_PATH}
 
 #Move to site root
 cd ${MY_SITE_PATH}
