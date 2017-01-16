@@ -1,5 +1,5 @@
 #!/bin/bash
-#### Installation script to setup Ubuntu, Nginx, Percona, Php-fpm, Magento and Wordpress
+#### Installation script to add WordPress sites to already setup server.
 #### By Philip N. Deatherage, Deatherage Web Development
 #### www.dwdonline.com
 
@@ -48,7 +48,7 @@ pause
     
     wget -q https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/default.conf
 
-    wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/magento.conf
+    wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/wp.conf
 
     sed -i "s/example.com/${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s/www.example.com/www.${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
@@ -90,7 +90,7 @@ echo
 read -e -p "---> What do you want to name your WordPress MySQL database?: " -i "" WP_MYSQL_DATABASE
 read -e -p "---> What do you want to name your WordPress MySQL user?: " -i "" WP_MYSQL_USER
 read -e -p "---> What do you want your WordPress MySQL password to be?: " -i "" WP_MYSQL_USER_PASSWORD
-read -e -p "---> What do you want your WordPress directory to be. If this will be at the root enter the same as your root ${MY_SITE_PATH} or if it will be for Magento wp:" -i "${MY_SITE_PATH}/wp" WP_DIRECTORY
+read -e -p "---> What do you want your WordPress directory to be. ${MY_SITE_PATH}:" -i "${MY_SITE_PATH}" WP_DIRECTORY
 
 cd "${MY_SITE_PATH}"
 
