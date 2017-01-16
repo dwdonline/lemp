@@ -55,22 +55,15 @@ pause
 
 echo "---> INSTALLING NGINX AND PHP-FPM"
 
-nginx=development
-
-add-apt-repository ppa:nginx/$nginx
-
 apt-get -y update
 
-apt-get -y install php7.0-fpm php7.0-mcrypt php7.0-curl php7.0-cli php7.0-mysql php7.0-gd php7.0-intl php7.0-xsl php7.0-gd php-ssh2 php7.0-mbstring php7.0-soap php7.0-zip libgd2-xpm-dev libgeoip-dev libgd2-xpm-dev libssh2-1 libzip4 libperl-dev libpcre3 libpcre3-dev libssl-dev zlib1g-dev nginx
+apt-get -y install php7.0-fpm php7.0-mcrypt php7.0-curl php7.0-cli php7.0-mysql php7.0-gd php7.0-intl php7.0-xsl php7.0-gd php-ssh2 php7.0-mbstring php7.0-soap php7.0-zip libgd2-xpm-dev libgeoip-dev libgd2-xpm-dev libssh2-1 libzip4 libperl-dev libpcre3 libpcre3-dev libssl-dev zlib1g-dev
 echo "---> NOW, LET'S COMPILE NGINX WITH PAGESPEED"
 pause
 
 cd
 
-service nginx stop
-pkill nginx
-
-apt-get install libxslt-dev libpam0g-dev -y
+apt-get install libxslt-dev gcc -y
 
 mkdir nginx_install
 
@@ -86,11 +79,6 @@ psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz
 [ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
 wget ${psol_url}
 tar -xzvf $(basename ${psol_url})  # extracts to psol/
-
-cd /root/nginx_install
-wget https://github.com/sto/ngx_http_auth_pam_module/archive/master.zip
-unzip master.zip
-rm master.zip
 
 cd /root/nginx_install
 wget https://github.com/arut/nginx-dav-ext-module/archive/master.zip
@@ -119,13 +107,11 @@ cd nginx-1.11.8
 
 PS_NGX_EXTRA_FLAGS="--with-cc=/usr/bin/gcc --with-ld-opt=-static-libstdc++"
 
-./configure --user=www-data --group=www-data --with-cc-opt='-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2' --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now' --prefix=/usr/share/nginx --conf-path=/etc/nginx/nginx.conf --http-log-path=/var/log/nginx/access.log --error-log-path=/var/log/nginx/error.log --lock-path=/var/lock/nginx.lock --pid-path=/run/nginx.pid --modules-path=/usr/lib/nginx/modules --http-client-body-temp-path=/var/lib/nginx/body --http-fastcgi-temp-path=/var/lib/nginx/fastcgi --http-proxy-temp-path=/var/lib/nginx/proxy --http-scgi-temp-path=/var/lib/nginx/scgi --http-uwsgi-temp-path=/var/lib/nginx/uwsgi --with-pcre-jit --with-http_ssl_module --with-http_stub_status_module --with-http_realip_module --with-http_auth_request_module --with-http_v2_module --with-http_dav_module --with-http_slice_module --with-threads --with-http_addition_module --with-http_geoip_module=dynamic --with-http_gunzip_module --with-http_gzip_static_module --with-http_image_filter_module=dynamic --with-http_sub_module --with-http_xslt_module=dynamic --with-stream=dynamic --with-stream_ssl_module --with-mail=dynamic --with-mail_ssl_module --add-module=$HOME/nginx_install/ngx_http_auth_pam_module-master --add-module=$HOME/nginx_install/nginx-dav-ext-module-master --add-module=$HOME/nginx_install/echo-nginx-module-master --add-module=$HOME/nginx_install/nginx-upstream-fair-master --add-module=$HOME/nginx_install/ngx_http_substitutions_filter_module-master --add-module=$HOME/nginx_install/ngx_pagespeed-${NPS_VERSION}-beta ${PS_NGX_EXTRA_FLAGS}
+./configure --user=www-data --group=www-data --with-cc-opt='-g -O2 -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2' --with-ld-opt='-Wl,-Bsymbolic-functions -Wl,-z,relro -Wl,-z,now' --prefix=/usr/share/nginx --conf-path=/etc/nginx/nginx.conf --http-log-path=/var/log/nginx/access.log --error-log-path=/var/log/nginx/error.log --lock-path=/var/lock/nginx.lock --pid-path=/run/nginx.pid --modules-path=/usr/lib/nginx/modules --http-client-body-temp-path=/var/lib/nginx/body --http-fastcgi-temp-path=/var/lib/nginx/fastcgi --http-proxy-temp-path=/var/lib/nginx/proxy --http-scgi-temp-path=/var/lib/nginx/scgi --http-uwsgi-temp-path=/var/lib/nginx/uwsgi --with-pcre-jit --with-http_ssl_module --with-http_stub_status_module --with-http_realip_module --with-http_auth_request_module --with-http_v2_module --with-http_dav_module --with-http_slice_module --with-threads --with-http_addition_module --with-http_geoip_module=dynamic --with-http_gunzip_module --with-http_gzip_static_module --with-http_image_filter_module=dynamic --with-http_sub_module --with-http_xslt_module=dynamic --with-stream=dynamic --with-stream_ssl_module --with-mail=dynamic --with-mail_ssl_module --add-module=$HOME/nginx_install/ngx_pagespeed-${NPS_VERSION}-beta ${PS_NGX_EXTRA_FLAGS}
 
 make
 
 make install
-
-service nginx restart
 
 echo "---> NOW, LET'S SETUP SSL."
 pause
