@@ -117,6 +117,10 @@ make install
 
 service nginx restart
 
+sudo systemctl unmask nginx.service
+
+service nginx restart
+
 echo "---> NOW, LET'S SETUP SSL."
 pause
 
@@ -169,7 +173,10 @@ cd
 echo "---> OK, WE ARE DONE SETTING UP THE SERVER. LET'S PROCEED TO CONFIGURING THE NGINX HOST FILES."
 
 pause
-    read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH    
+    read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH   
+    
+    mkdir -p /etc/nginx/conf.d
+    
     cd /etc/nginx/conf.d
 
     wget -qO  /etc/nginx/conf.d/pagespeed.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/pagespeed.conf
