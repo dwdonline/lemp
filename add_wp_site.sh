@@ -36,7 +36,7 @@ read -e -p "---> What is your departyment - ie: IT (Can be blank): " -i "" MY_OU
 
 mkdir -p /etc/ssl/sites/
 
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/sites/selfsigned.key -out /etc/ssl/sites/selfsigned.crt -subj "/C=${MY_COUNTRY}/ST=${MY_REGION}/L=${MY_CITY}/O=${MY_O}/OU=${MY_OU}/CN=${MY_DOMAIN}"
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/sites/${MY_DOMAIN}_selfsigned.key -out /etc/ssl/sites/${MY_DOMAIN}_selfsigned.crt -subj "/C=${MY_COUNTRY}/ST=${MY_REGION}/L=${MY_CITY}/O=${MY_O}/OU=${MY_OU}/CN=${MY_DOMAIN}"
 
 openssl dhparam -out /etc/ssl/dhparams.pem 2048
 
@@ -54,8 +54,8 @@ pause
     sed -i "s/www.example.com/www.${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,root /var/www/html,root ${MY_SITE_PATH},g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,user  www-data,user  ${MY_WEB_USER},g" /etc/nginx/nginx.conf
-    sed -i "s,ssl_certificate_name,ssl_certificate  /etc/ssl/sites/selfsigned.crt;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
-    sed -i "s,ssl_certificate_key,ssl_certificate_key /etc/ssl/sites/selfsigned.key;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,ssl_certificate_name,ssl_certificate  /etc/ssl/sites/${MY_DOMAIN}_selfsigned.crt;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,ssl_certificate_key,ssl_certificate_key /etc/ssl/sites/${MY_DOMAIN}_selfsigned.key;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,access_log,access_log /var/log/nginx/${MY_DOMAIN}_access.log;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,error_log,error_log /var/log/nginx/${MY_DOMAIN}_error.log;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
 
