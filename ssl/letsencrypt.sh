@@ -40,3 +40,8 @@ EOF
 (crontab -l 2>/dev/null; echo "@daily /root/renewCerts.sh") | crontab -
 
 chmod +x /root/renewCerts.sh
+
+#Copy verification folder for SSL
+//cd "/var/www/html"
+//cp -r ".well-known" ${MY_SITE_PATH}
+
