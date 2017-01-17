@@ -123,50 +123,6 @@ sudo systemctl unmask nginx.service
 
 service nginx restart
 
-echo "---> NOW, LET'S SETUP SSL."
-pause
-
-read -p "Do you want to use Let's Encrypt? <y/N> " choice
-case "$choice" in 
-  y|Y|Yes|yes|YES ) 
-#cd /etc/ssl/
-cd
-
-export DOMAINS="${MY_DOMAIN},www.${MY_DOMAIN},${MY_DOMAINS}"
-export DIR="${MY_SITE_PATH}"
-
-sudo letsencrypt certonly -a webroot --webroot-path=$DIR -d $DOMAINS
-
-openssl dhparam -out /etc/ssl/dhparams.pem 2048
-
-MY_SSL="/etc/letsencrypt/live/${MY_DOMAIN}/fullchain.pem"
-MY_SSL_KEY="/etc/letsencrypt/live/${MY_DOMAIN}/privkey.pem"
-
-;;
-  n|N|No|no|NO )
-
-echo "OK, we will install a self-signed SSL then."
-
-echo
-read -e -p "---> What is the 2 letter country? - ie: US: " -i "US" MY_COUNTRY
-read -e -p "---> What is your state/province? - ie: California: " -i "California" MY_REGION
-read -e -p "---> What is your city? - ie: Los Angeles: " -i "Los Angeles" MY_CITY
-read -e -p "---> What is your company - ie: Deatherage Co: " -i "" MY_O
-read -e -p "---> What is your departyment - ie: IT (Can be blank): " -i "" MY_OU
-
-mkdir -p /etc/ssl/sites/
-
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/sites/${MY_DOMAIN}_selfsigned.key -out /etc/ssl/sites/${MY_DOMAIN}_selfsigned.crt -subj "/C=${MY_COUNTRY}/ST=${MY_REGION}/L=${MY_CITY}/O=${MY_O}/OU=${MY_OU}/CN=${MY_DOMAIN}"
-
-MY_SSL="/etc/ssl/sites/${MY_DOMAIN}_selfsigned.crt"
-MY_SSL_KEY="/etc/ssl/sites/${MY_DOMAIN}_selfsigned.key"
-
-openssl dhparam -out /etc/ssl/dhparams.pem 2048
-
-;;
-  * ) echo "invalid";;
-esac
-
 echo "---> INSTALLING PERCONA"
 pause
 
@@ -244,12 +200,10 @@ case "$choice" in
   * ) echo "invalid choice";;
 esac
 
-sed -i "s/example.com/${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s/example.com/${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s/www.example.com/www.${MY_DOMAIN}/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,root /var/www/html,root ${MY_SITE_PATH},g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,user  www-data,user  ${MY_WEB_USER},g" /etc/nginx/nginx.conf
-    sed -i "s,#ssl_certificate_name,ssl_certificate  ${MY_SSL};,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
-    sed -i "s,#ssl_certificate_key,ssl_certificate_key ${MY_SSL_KEY};,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,access_log,access_log /var/log/nginx/${MY_DOMAIN}_access.log;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,error_log,error_log /var/log/nginx/${MY_DOMAIN}_error.log;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
 
@@ -278,6 +232,60 @@ case "$choice" in
 ;;
   * ) echo "invalid choice";;
 esac
+
+echo "---> NOW, LET'S SETUP SSL."
+pause
+
+read -p "Do you want to use Let's Encrypt? <y/N> " choice
+case "$choice" in 
+  y|Y|Yes|yes|YES ) 
+#cd /etc/ssl/
+cd
+
+export DOMAINS="${MY_DOMAIN},www.${MY_DOMAIN},${MY_DOMAINS}"
+export DIR="${MY_SITE_PATH}"
+
+sudo letsencrypt certonly -a webroot --webroot-path=$DIR -d $DOMAINS
+
+openssl dhparam -out /etc/ssl/dhparams.pem 2048
+
+MY_SSL="/etc/letsencrypt/live/${MY_DOMAIN}/fullchain.pem"
+MY_SSL_KEY="/etc/letsencrypt/live/${MY_DOMAIN}/privkey.pem"
+
+;;
+  n|N|No|no|NO )
+
+echo "OK, we will install a self-signed SSL then."
+
+echo
+read -e -p "---> What is the 2 letter country? - ie: US: " -i "US" MY_COUNTRY
+read -e -p "---> What is your state/province? - ie: California: " -i "California" MY_REGION
+read -e -p "---> What is your city? - ie: Los Angeles: " -i "Los Angeles" MY_CITY
+read -e -p "---> What is your company - ie: Deatherage Co: " -i "" MY_O
+read -e -p "---> What is your departyment - ie: IT (Can be blank): " -i "" MY_OU
+
+mkdir -p /etc/ssl/sites/
+
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/sites/${MY_DOMAIN}_selfsigned.key -out /etc/ssl/sites/${MY_DOMAIN}_selfsigned.crt -subj "/C=${MY_COUNTRY}/ST=${MY_REGION}/L=${MY_CITY}/O=${MY_O}/OU=${MY_OU}/CN=${MY_DOMAIN}"
+
+MY_SSL="/etc/ssl/sites/${MY_DOMAIN}_selfsigned.crt"
+MY_SSL_KEY="/etc/ssl/sites/${MY_DOMAIN}_selfsigned.key"
+
+openssl dhparam -out /etc/ssl/dhparams.pem 2048
+
+;;
+  * ) echo "invalid";;
+esac
+
+    sed -i "s,listen 80;,listen 443 http2 ssl;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,#listen80,listen  80;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,#servername,server_name  ${MY_DOMAIN} www.${MY_DOMAIN};,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,#return,return 301 https://www.${MY_DOMAIN}$request_uri;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,#ssl_certificate_name,ssl_certificate  ${MY_SSL};,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,#ssl_certificate_key,ssl_certificate_key ${MY_SSL_KEY};,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,#include conf.d/ssl.conf,include conf.d/ssl.conf;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+
+service nginx restart
 
 #Create host root
 cd
