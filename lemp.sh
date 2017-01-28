@@ -243,6 +243,9 @@ case "$choice" in
   y|Y|Yes|yes|YES ) 
 #cd /etc/ssl/
 cd
+
+apt-get install letsencrypt -y
+
 read -e -p "---> Any additional domain name(s) seperated: domain.com, dev.domain.com: " -i "www.${MY_DOMAIN}" MY_DOMAINS
 export DOMAINS="${MY_DOMAIN},www.${MY_DOMAIN},${MY_DOMAINS}"
 export DIR="${MY_SITE_PATH}"
