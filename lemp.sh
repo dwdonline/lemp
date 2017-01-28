@@ -288,7 +288,7 @@ esac
     sed -i "s,#return,return 301 https://www.${MY_DOMAIN}$request_uri;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,#ssl_certificate_name,ssl_certificate  ${MY_SSL};,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,#ssl_certificate_key,ssl_certificate_key ${MY_SSL_KEY};,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
-    sed -i "s,#include conf.d/ssl.conf,include conf.d/ssl.conf;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,#include conf.d/ssl.conf,include conf.d/ssl.conf,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
 
 service nginx restart
 
