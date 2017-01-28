@@ -158,6 +158,8 @@ cd
 echo "---> OK, WE ARE DONE SETTING UP THE SERVER. LET'S PROCEED TO CONFIGURING THE NGINX HOST FILES."
 
 pause
+
+    read -e -p "---> What will your main domain be - ie: domain.com: " -i "" MY_DOMAIN
     read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH   
     
     mkdir -p /etc/nginx/conf.d
@@ -241,7 +243,7 @@ case "$choice" in
   y|Y|Yes|yes|YES ) 
 #cd /etc/ssl/
 cd
-
+read -e -p "---> Any additional domain name(s) seperated: domain.com, dev.domain.com: " -i "www.${MY_DOMAIN}" MY_DOMAINS
 export DOMAINS="${MY_DOMAIN},www.${MY_DOMAIN},${MY_DOMAINS}"
 export DIR="${MY_SITE_PATH}"
 
