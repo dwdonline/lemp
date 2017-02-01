@@ -57,7 +57,12 @@ echo "---> INSTALLING NGINX AND PHP-FPM"
 
 apt-get -y update
 
-apt-get -y install php7.0-fpm php7.0-mcrypt php7.0-curl php7.0-cli php7.0-mysql php7.0-gd php7.0-intl php7.0-xsl php7.0-gd php-ssh2 php7.0-mbstring php7.0-soap php7.0-zip libgd2-xpm-dev libgeoip-dev libgd2-xpm-dev libssh2-1 libzip4 libperl-dev libpcre3 libpcre3-dev libssl-dev zlib1g-dev nginx
+add-apt-repository -y ppa:ondrej/php
+
+apt-get -y install php-pear php7.0-fpm php7.0-mcrypt php7.0-curl php7.0-cli php7.0-mysql php7.0-gd php7.0-intl php7.0-xsl php7.0-gd php-ssh2 php7.0-mbstring php7.0-soap php7.0-zip libgd2-xpm-dev libgeoip-dev libgd2-xpm-dev libssh2-1 libzip4 libperl-dev libpcre3 libpcre3-dev libssl-dev zlib1g-dev nginx
+
+apt-get -y install php5.6-fpm php-pear php5.6-mcrypt php5.6-curl php5.6-cli php5.6-mysql php5.6-gd php5.6-intl php5.6-xsl php5.6-gd php-ssh2 php5.6-mbstring php5.6-soap php5.6-zip
+
 echo "---> NOW, LET'S COMPILE NGINX WITH PAGESPEED"
 pause
 
@@ -161,6 +166,7 @@ pause
 
     read -e -p "---> What will your main domain be - ie: domain.com: " -i "" MY_DOMAIN
     read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH   
+    read -e -p "---> Which version of php will you be using? Either enter 5.6 or 7.0: " -i "5.6" PHP_VERSION   
     
     mkdir -p /etc/nginx/conf.d
     
@@ -208,6 +214,8 @@ esac
     sed -i "s,user  www-data,user  ${MY_WEB_USER},g" /etc/nginx/nginx.conf
     sed -i "s,access_log,access_log /var/log/nginx/${MY_DOMAIN}_access.log;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,error_log,error_log /var/log/nginx/${MY_DOMAIN}_error.log;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+
+    sed -i "s/fastcgi_pass/fastcgi_pass unix:/run/php/php${PHP_VERSION}-fpm.sock/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
 
     ln -s /etc/nginx/sites-available/${MY_DOMAIN}.conf /etc/nginx/sites-enabled/${MY_DOMAIN}.conf
     ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
