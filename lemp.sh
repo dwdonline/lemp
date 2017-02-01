@@ -219,7 +219,7 @@ esac
     sed -i "s,access_log,access_log /var/log/nginx/${MY_DOMAIN}_access.log;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,error_log,error_log /var/log/nginx/${MY_DOMAIN}_error.log;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
 
-    sed -i "s/fastcgi_pass/fastcgi_pass unix:/run/php/php${PHP_VERSION}-fpm.sock/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,fastcgi_pass/fastcgi_pass unix:/run/php/php${PHP_VERSION}-fpm.sock,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
 
     ln -s /etc/nginx/sites-available/${MY_DOMAIN}.conf /etc/nginx/sites-enabled/${MY_DOMAIN}.conf
     ln -s /etc/nginx/sites-available/default.conf /etc/nginx/sites-enabled/default.conf
