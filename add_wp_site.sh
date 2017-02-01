@@ -30,6 +30,8 @@ read -e -p "---> Any additional domain name(s) seperated: domain.com, dev.domain
 
 read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH
 
+read -e -p "---> Which version of php will you be using? Either enter 5.6 or 7.0: " -i "5.6" PHP_VERSION 
+
 #Create host root
 cd
 mkdir -p ${MY_SITE_PATH}
@@ -48,6 +50,8 @@ pause
     sed -i "s,error_log,error_log /var/log/nginx/${MY_DOMAIN}_error.log;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
 
     ln -s /etc/nginx/sites-available/${MY_DOMAIN}.conf /etc/nginx/sites-enabled/${MY_DOMAIN}.conf
+    
+    sed -i "s/fastcgi_pass/fastcgi_pass unix:/run/php/php${PHP_VERSION}-fpm.sock/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
         
     sed -i "s,#	include wordpress/yoast.conf;,	include wordpress/yoast.conf;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,#	include wordpress/wordfence.conf;,	include wordpress/wordfence.conf;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
