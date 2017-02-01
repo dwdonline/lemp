@@ -168,6 +168,10 @@ pause
     read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH   
     read -e -p "---> Which version of php will you be using? Either enter 5.6 or 7.0: " -i "5.6" PHP_VERSION   
     
+    #Create host root
+    cd
+    mkdir -p ${MY_SITE_PATH}
+    
     mkdir -p /etc/nginx/conf.d
     
     cd /etc/nginx/conf.d
@@ -299,10 +303,6 @@ esac
     sed -i "s,#include conf.d/ssl.conf,include conf.d/ssl.conf,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
 
 service nginx restart
-
-#Create host root
-cd
-mkdir -p ${MY_SITE_PATH}
 
 #Move to site root
 cd ${MY_SITE_PATH}
