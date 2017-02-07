@@ -203,10 +203,10 @@ pause
 
 read -p "Is this Magento 1? Answer No for Magento 2. <y/N> " choice
 case "$choice" in 
-  y|Y|Yes|yes|YES ) 
+  y|Y|Yes|yes|YES|1 ) 
     wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/magento.conf
 ;;
-  n|N|No|no|NO )
+  n|N|No|no|NO|2 )
     wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/sites-available/magento2.conf
 ;;
   * ) echo "invalid choice";;
