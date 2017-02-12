@@ -51,7 +51,7 @@ pause
 
     ln -s /etc/nginx/sites-available/${MY_DOMAIN}.conf /etc/nginx/sites-enabled/${MY_DOMAIN}.conf
     
-    sed -i "s/fastcgi_pass/fastcgi_pass unix:/run/php/php${PHP_VERSION}-fpm.sock/g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,fastcgi_pass,fastcgi_pass unix:/run/php/php${PHP_VERSION}-fpm.sock,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
         
     sed -i "s,#	include wordpress/yoast.conf;,	include wordpress/yoast.conf;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,#	include wordpress/wordfence.conf;,	include wordpress/wordfence.conf;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
