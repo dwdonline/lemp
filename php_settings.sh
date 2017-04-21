@@ -12,7 +12,7 @@ echo "---> First, we have to set some settings."
 pause
 read -e -p "---> What php version?: " -i "7.1" PHP_VERSION
 read -e -p "---> What is your path the your ini file?: " -i "/etc/php/${PHP_VERSION}/fpm/php.ini" PHP_FILE_PATH
-read -e -p "---> How much memory do you want to give PHP? I like to use however much is availabe on the server.: " -i "2048MB" PHP_MEMORY
+read -e -p "---> How much memory do you want to give PHP? I like to use however much is availabe on the server.: " -i "2048M" PHP_MEMORY
 
     
 sed -i "s,max_execution_time = 30,max_execution_time = 18000,g" ${PHP_FILE_PATH}
