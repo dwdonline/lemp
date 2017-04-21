@@ -15,10 +15,10 @@ read -e -p "---> What is your path the your ini file?: " -i "/etc/php/${PHP_VERS
 read -e -p "---> How much memory do you want to give PHP? I like to use however much is availabe on the server.: " -i "2048MB" PHP_MEMORY
 
     
-sed -i "s,max_execution_time = 30,	max_execution_time = 18000,g" ${PHP_FILE_PATH}
-sed -i "s,max_input_time = 60,	max_input_time = 360,g" ${PHP_FILE_PATH}
-sed -i "s,; max_input_vars = 1000,	max_input_vars = 10000,g" ${PHP_FILE_PATH}
-sed -i "s,memory_limit = 128M,	memory_limit = ${PHP_MEMORY},g" ${PHP_FILE_PATH}
-sed -i "s,upload_max_filesize = 2M, upload_max_filesize = 200M,g" ${PHP_FILE_PATH}
+sed -i "s,max_execution_time = 30,max_execution_time = 18000,g" ${PHP_FILE_PATH}
+sed -i "s,max_input_time = 60,max_input_time = 360,g" ${PHP_FILE_PATH}
+sed -i "s,; max_input_vars = 1000,max_input_vars = 10000,g" ${PHP_FILE_PATH}
+sed -i "s,memory_limit = 128M,memory_limit = ${PHP_MEMORY},g" ${PHP_FILE_PATH}
+sed -i "s,upload_max_filesize = 2M,upload_max_filesize = 200M,g" ${PHP_FILE_PATH}
 
 echo "that's it!"
