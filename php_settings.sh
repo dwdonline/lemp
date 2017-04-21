@@ -13,7 +13,8 @@ pause
 read -e -p "---> What is your main admin user?: " -i "" MAIN_ADMIN
 read -e -p "---> What php version?: " -i "7.1" PHP_VERSION
 read -e -p "---> What is your path the your ini file?: " -i "/etc/php/${PHP_VERSION}/fpm/php.ini" PHP_FILE_PATH
-read -e -p "---> How much memory do you want to give PHP?: " -i "var=$(free | awk '/^Mem:/{print $2}')" PHP_MEMORY
+read -e -p "---> How much memory do you want to give PHP?: " -i "freemem=$(echo -e 'import re\nmatched=re.search(r"^MemTotal:\s+(\d+)",open("/proc/meminfo").read())\nprint(int(matched.groups()[0])/(1024.**2))' | python)
+" PHP_MEMORY
 
     
 sed -i "s,max_execution_time = 30,	max_execution_time = 18000,g" ${PHP_FILE_PATH}
