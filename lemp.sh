@@ -167,7 +167,7 @@ pause
     read -e -p "---> What will your main domain be - ie: domain.com: " -i "" MY_DOMAIN
     read -e -p "---> Any additional domain name(s) or sub domains, seperated by a space: domain.com dev.domain.com: " -i "www.${MY_DOMAIN}" MY_EXTRA_DOMAINS
     read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH   
-    read -e -p "---> Which version of php will you be using? Either enter 5.6 or 7.0: " -i "5.6" PHP_VERSION   
+    read -e -p "---> Which version of php will you be using? Either enter 5.6 or 7.1: " -i "5.6" PHP_VERSION   
     
     #Create host root
     cd
@@ -200,15 +200,20 @@ pause
     
     cd /etc/nginx/sites-available
     
+    rm -rf /etc/nginx/sites-enabled/default
+    
     wget -q https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/default.conf
 
-read -p "Is this Magento 1? Answer No for Magento 2. <y/N> " choice
+read -p "Will you be running Magento 1 (Answer m1), Magento 2 (Answer m2), or WordPress? (Answer WP). <y/N> " choice
 case "$choice" in 
-  y|Y|Yes|yes|YES|1 ) 
+  y|Y|Yes|yes|YES|1|M1|m1 ) 
     wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/magento.conf
 ;;
-  n|N|No|no|NO|2 )
+  n|N|No|no|NO|2|M2|m1 )
     wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/sites-available/magento2.conf
+;;
+  WP|wp|3|Wp|wP|WordPress )
+    wget -qO /etc/nginx/sites-available/${MY_DOMAIN}.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/sites-available/wp.conf
 ;;
   * ) echo "invalid choice";;
 esac
@@ -452,7 +457,7 @@ chown -R www-data.www-data wp-content
 
 sudo chmod -R 775 ${MY_SITE_PATH}
 
-echo "---> Let;s cleanup:"
+echo "---> Let's cleanup:"
 pause
 cd
 rm -rf master.zip nginx-1.11.5 nginx-1.11.5.tar.gz ngx_pagespeed-master
