@@ -247,6 +247,10 @@ case "$choice" in
   * ) echo "invalid choice";;
 esac
 
+service nginx restart
+
+service php${PHP_VERSION}-fpm restart
+
 echo "---> NOW, LET'S SETUP SSL."
 pause
 
