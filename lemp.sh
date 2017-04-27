@@ -280,6 +280,27 @@ openssl dhparam -out /etc/ssl/dhparams.pem 2048
 MY_SSL="/etc/letsencrypt/live/${MY_DOMAIN}/fullchain.pem"
 MY_SSL_KEY="/etc/letsencrypt/live/${MY_DOMAIN}/privkey.pem"
 
+echo "---> NOW, LET'S SETUP SSL to renew every 60 days."
+pause
+
+cd
+
+cat > renewCerts.sh <<EOF
+#!/bin/sh
+# This script renews all the Let's Encrypt certificates with a validity < 30 days
+if ! letsencrypt renew > /var/log/letsencrypt/renew.log 2>&1 ; then
+    echo Automated renewal failed:
+    cat /var/log/letsencrypt/renew.log
+    exit 1
+fi
+nginx -t && nginx -s reload
+EOF
+
+#Add cronjob for renewing ssl
+(crontab -l 2>/dev/null; echo "@daily /renewCerts.sh") | crontab -
+
+chmod +x /root/renewCerts.sh
+
 ;;
   n|N|No|no|NO )
 
