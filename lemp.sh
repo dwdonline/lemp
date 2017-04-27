@@ -87,22 +87,22 @@ psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz
 wget ${psol_url}
 tar -xzvf $(basename ${psol_url})  # extracts to psol/
 
-cd /root/nginx_install
+cd $HOME/nginx_install
 wget https://github.com/arut/nginx-dav-ext-module/archive/master.zip
 unzip master.zip
 rm master.zip
 
-cd /root/nginx_install
+cd $HOME/nginx_install
 wget https://github.com/openresty/echo-nginx-module/archive/master.zip
 unzip master.zip
 rm master.zip
 
-cd /root/nginx_install
+cd $HOME/nginx_install
 wget https://github.com/itoffshore/nginx-upstream-fair/archive/master.zip
 unzip master.zip
 rm master.zip
 
-cd /root/nginx_install
+cd $HOME/nginx_install
 wget https://github.com/yaoweibin/ngx_http_substitutions_filter_module/archive/master.zip
 unzip master.zip
 rm master.zip
