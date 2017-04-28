@@ -30,7 +30,7 @@ read -e -p "---> Any additional domain name(s) or sub domains, seperated by a sp
 
 read -e -p "---> Enter your web root path: " -i "/var/www/${MY_DOMAIN}/public" MY_SITE_PATH
 
-read -e -p "---> Which version of php will you be using? Either enter 5.6 or 7.0: " -i "5.6" PHP_VERSION 
+read -e -p "---> Which version of php will you be using? Either enter 5.6, 7.0, or 7.1: " -i "7.1" PHP_VERSION 
 
 #Create host root
 cd
