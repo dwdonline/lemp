@@ -326,7 +326,7 @@ openssl dhparam -out /etc/ssl/dhparams.pem 2048
   * ) echo "invalid";;
 esac
 
-    sed -i "s,listen 80;,listen 443 http2 ssl;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
+    sed -i "s,listen 80;,listen 443 ssl http2;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,#listen80,listen  80;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,#servername,server_name  ${MY_DOMAIN} www.${MY_DOMAIN};,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
     sed -i "s,#return,return 301 https://www.${MY_DOMAIN}$request_uri;,g" /etc/nginx/sites-available/${MY_DOMAIN}.conf
