@@ -20,5 +20,6 @@ sed -i "s,max_input_time = 60,max_input_time = 360,g" ${PHP_FILE_PATH}
 sed -i "s,; max_input_vars = 1000,max_input_vars = 10000,g" ${PHP_FILE_PATH}
 sed -i "s,memory_limit = 128M,memory_limit = ${PHP_MEMORY},g" ${PHP_FILE_PATH}
 sed -i "s,upload_max_filesize = 2M,upload_max_filesize = 200M,g" ${PHP_FILE_PATH}
+sed -i "s,post_max_size = 8M,post_max_size = 100M,g" ${PHP_FILE_PATH}
 
 echo "that's it!"
