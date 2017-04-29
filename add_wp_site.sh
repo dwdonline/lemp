@@ -63,7 +63,6 @@ sudo chmod -R 775 ${MY_SITE_PATH}
 service nginx restart
 
 echo "---> NOW, LET'S SETUP SSL."
-pause
 
 read -p "Do you want to use Let's Encrypt? <y/N> " choice
 case "$choice" in 
@@ -183,18 +182,6 @@ perl -i -pe'
   s/put your unique phrase here/salt()/ge
 ' wp-config.php
 
-;;
-  n|N|No|no|NO )
-    echo "You didn\'t install WordPress."
-    service mysql restart
-;;
-  * ) echo "invalid choice";;
-esac
-
-echo "---> Let's add a robots.txt file:"
-wget -qO ${MY_SITE_PATH}/robots.txt https://raw.githubusercontent.com/dwdonline/lemp/master/robots.txt
-sed -i "s,Sitemap: http://YOUR-DOMAIN.com/sitemap_index.xml,Sitemap: https://www.${MY_DOMAIN}/sitemap_index.xml,g" ${MY_SITE_PATH}/robots.txt
-
 echo "---> Let's set the permissions for the site:"
 pause
 
@@ -216,4 +203,16 @@ chmod 600 wp-config.php
 
 chown -R www-data.www-data wp-content
 
-sudo chmod -R 775 ${MY_SITE_PATH}
+;;
+  n|N|No|no|NO )
+    echo "You didn\'t install WordPress."
+    service mysql restart
+;;
+  * ) echo "invalid choice";;
+esac
+
+echo "---> Let's add a robots.txt file:"
+wget -qO ${MY_SITE_PATH}/robots.txt https://raw.githubusercontent.com/dwdonline/lemp/master/robots.txt
+sed -i "s,Sitemap: http://YOUR-DOMAIN.com/sitemap_index.xml,Sitemap: https://www.${MY_DOMAIN}/sitemap_index.xml,g" ${MY_SITE_PATH}/robots.txt
+
+echo "Lovely, see how easy that was? Now what will you do with the rest of your day?"
