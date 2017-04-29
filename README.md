@@ -42,3 +42,14 @@ wget -q https://raw.githubusercontent.com/dwdonline/lemp/master/add_wp_site.sh
 chmod 550 add_wp_site.sh
 
 ./add_wp_site.sh
+
+
+To apply php settings:
+
+cd 
+
+wget https://raw.githubusercontent.com/dwdonline/lemp/master/php_settings.sh
+
+chmod 550 php_settings.sh
+
+./php_settings.sh
