@@ -204,7 +204,7 @@ cd "${MY_SITE_PATH}"
 
 chown -R ${NEW_ADMIN}.www-data ${MY_SITE_PATH}
 
-chown -R ${NEW_ADMIN}.www-data /var/www
+#chown -R ${NEW_ADMIN}.www-data /var/www
 
 chown -R ${NEW_ADMIN}.www-data robots.txt
 
