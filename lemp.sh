@@ -179,6 +179,7 @@ pause
 
     wget -qO  /etc/nginx/conf.d/pagespeed.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/pagespeed.conf
     wget -qO  /etc/nginx/conf.d/fastcgi-params.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/fastcgi-params.conf
+    wget -qO  /etc/nginx/conf.d/headers.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/headers.conf
     wget -qO  /etc/nginx/conf.d/gzip.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/gzip.conf
     wget -qO  /etc/nginx/conf.d/http.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/http.conf
     wget -qO  /etc/nginx/conf.d/limits.conf https://raw.githubusercontent.com/dwdonline/lemp/master/nginx/conf.d/limits.conf
