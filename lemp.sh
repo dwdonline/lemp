@@ -59,9 +59,9 @@ add-apt-repository -y ppa:ondrej/php
 
 apt-get -y update
 
-apt-get -y install php-pear php7.1-fpm php7.1-mcrypt php7.1-curl php7.1-cli php7.1-mysql php7.1-gd php7.1-intl php7.1-xsl php7.1-gd php-ssh2 php7.1-mbstring php7.1-soap php7.1-zip libgd2-xpm-dev libgeoip-dev libgd2-xpm-dev libssh2-1 libzip4 libperl-dev libpcre3 libpcre3-dev libssl-dev zlib1g-dev nginx
+apt-get -y install php-pear php-curl php7.1-fpm php7.1-mcrypt php7.1-curl php7.1-cli php7.1-mysql php7.1-gd php7.1-intl php7.1-xsl php7.1-gd php-ssh2 php7.1-mbstring php7.1-soap php7.1-zip libgd2-xpm-dev libgeoip-dev libgd2-xpm-dev libssh2-1 libzip4 libperl-dev libpcre3 libpcre3-dev libssl-dev zlib1g-dev nginx
 
-apt-get -y install php5.6-fpm php-pear php5.6-mcrypt php5.6-curl php5.6-cli php5.6-mysql php5.6-gd php5.6-intl php5.6-xsl php5.6-gd php-ssh2 php5.6-mbstring php5.6-soap php5.6-zip
+apt-get -y install php5.6-fpm php5.6-mcrypt php5.6-curl php5.6-cli php5.6-mysql php5.6-gd php5.6-intl php5.6-xsl php5.6-gd php-ssh2 php5.6-mbstring php5.6-soap php5.6-zip
 
 echo "---> NOW, LET'S COMPILE NGINX WITH PAGESPEED"
 pause
