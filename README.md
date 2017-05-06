@@ -53,3 +53,9 @@ wget https://raw.githubusercontent.com/dwdonline/lemp/master/php_settings.sh
 chmod 550 php_settings.sh
 
 ./php_settings.sh
+
+If you need professional help, feel free to reach out to me via text or email.
+I charge $90 an hour. 
+(619) 550-7711 cell.
+pd@dwdonline.com
+<a href="https://www.dwdonline.com">Deatherage Web Development</a>
