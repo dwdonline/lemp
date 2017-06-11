@@ -265,43 +265,33 @@ read -p "Do you want to use Let's Encrypt? <y/N> " choice
 case "$choice" in 
   y|Y|Yes|yes|YES ) 
 #cd /etc/ssl/
+
 cd
 
-apt-get install letsencrypt -y
+add-apt-repository -y ppa:certbot/certbot
+
+apt-get update
+
+apt-get -y install certbot
 
 read -e -p "---> Any additional domain name(s) seperated: domain.com,dev.domain.com (no spaces): " -i "www.${MY_DOMAIN}" MY_DOMAINS
 
-export DOMAINS="${MY_DOMAIN},${MY_DOMAINS}"
-export DIR="${MY_SITE_PATH}"
+#export DOMAINS="${MY_DOMAIN},${MY_DOMAINS}"
+#export DIR="${MY_SITE_PATH}"
 
-sudo letsencrypt certonly -a webroot --webroot-path=$DIR -d $DOMAINS
+sudo certbot certonly --webroot --webroot-path=${MY_SITE_PATH} -d ${MY_DOMAINS}
 
 openssl dhparam -out /etc/ssl/dhparams.pem 2048
 
 MY_SSL="/etc/letsencrypt/live/${MY_DOMAIN}/fullchain.pem"
 MY_SSL_KEY="/etc/letsencrypt/live/${MY_DOMAIN}/privkey.pem"
 
-echo "---> NOW, LET'S SETUP SSL to renew every 60 days."
+echo "---> NOW, LET'S SETUP SSL to renew by checking each day and renewing any that have less than 30 days left."
 pause
 
-cd
-
-cat > renewCerts.sh <<EOF
-#!/bin/sh
-# This script renews all the Let's Encrypt certificates with a validity < 30 days
-if ! letsencrypt renew > /var/log/letsencrypt/renew.log 2>&1 ; then
-    echo Automated renewal failed:
-    cat /var/log/letsencrypt/renew.log
-    exit 1
-fi
-nginx -t && nginx -s reload
-EOF
-
 #Add cronjob for renewing ssl
-(crontab -l 2>/dev/null; echo "@daily /renewCerts.sh") | crontab -
-
-chmod +x /root/renewCerts.sh
-
+#(crontab -l 2>/dev/null; echo "@daily /renewCerts.sh") | crontab -
+(crontab -l 2>/dev/null; echo '15 3 * * * /usr/bin/certbot renew --quiet --renew-hook "/bin/systemctl reload nginx"') | crontab -
 ;;
   n|N|No|no|NO )
 
