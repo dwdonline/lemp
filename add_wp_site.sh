@@ -63,18 +63,27 @@ sudo chmod -R 775 ${MY_SITE_PATH}
 service nginx restart
 
 echo "---> NOW, LET'S SETUP SSL."
+pause
 
 read -p "Do you want to use Let's Encrypt? <y/N> " choice
 case "$choice" in 
   y|Y|Yes|yes|YES ) 
 #cd /etc/ssl/
+
 cd
+
+add-apt-repository -y ppa:certbot/certbot
+
+apt-get update
+
+apt-get -y install certbot
+
 read -e -p "---> Any additional domain name(s) seperated: domain.com,dev.domain.com (no spaces): " -i "www.${MY_DOMAIN}" MY_DOMAINS
 
-export DOMAINS="${MY_DOMAIN},${MY_DOMAINS}"
-export DIR="${MY_SITE_PATH}"
+#export DOMAINS="${MY_DOMAIN},${MY_DOMAINS}"
+#export DIR="${MY_SITE_PATH}"
 
-sudo letsencrypt certonly -a webroot --webroot-path=$DIR -d $DOMAINS
+sudo certbot certonly --webroot --webroot-path=${MY_SITE_PATH} -d ${MY_DOMAIN} -d ${MY_DOMAINS}
 
 openssl dhparam -out /etc/ssl/dhparams.pem 2048
 
