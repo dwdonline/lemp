@@ -487,6 +487,6 @@ rm -rf /etc/nginx/sites-enabled/default
 cd
 
 # Let's set the server to update itself:
-sudo dpkg-reconfigure --priority=low unattended-upgrades
+#sudo dpkg-reconfigure --priority=low unattended-upgrades
 
 echo "I just saved you a shitload of time and headache. You're welcome."
