@@ -274,7 +274,7 @@ apt-get update
 
 apt-get -y install certbot
 
-read -e -p "---> Any additional domain name(s) seperated: domain.com,dev.domain.com (no spaces): " -i "-d www.${MY_DOMAIN}" OTHER_DOMAIN
+read -e -p "---> Any additional domain name(s) seperated: domain.com,dev.domain.com (no spaces): " -i "-d www.${MY_DOMAIN}" OTHER_DOMAINS
 
 #export DOMAINS="${MY_DOMAIN},${MY_DOMAINS}"
 #export DIR="${MY_SITE_PATH}"
