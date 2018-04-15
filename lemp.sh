@@ -109,9 +109,9 @@ unzip master.zip
 rm master.zip
 
 cd $HOME/nginx_install
-wget -q http://nginx.org/download/nginx-1.11.8.tar.gz
-tar -xzvf nginx-1.11.8.tar.gz
-cd nginx-1.11.8
+wget -q http://nginx.org/download/nginx-1.13.12.tar.gz
+tar -xzvf nginx-1.13.12.tar.gz
+cd nginx-1.13.12
 
 PS_NGX_EXTRA_FLAGS="--with-cc=/usr/bin/gcc --with-ld-opt=-static-libstdc++"
 
