@@ -74,14 +74,15 @@ cd
 
 mkdir nginx_install
 
-read -e -p "---> What version of Pagespeed do you want to use?: " -i "1.12.34.2" NPS_VERSION
+read -e -p "---> What version of Pagespeed do you want to use?: " -i "1.13.35.1-beta" NPS_VERSION
 
 cd $HOME/nginx_install
 
-wget https://github.com/pagespeed/ngx_pagespeed/archive/v${NPS_VERSION}-beta.zip
-unzip v${NPS_VERSION}-beta.zip
+wget https://github.com/apache/incubator-pagespeed-ngx/archive/v${NPS_VERSION}.zip
+unzip v${NPS_VERSION}.zip
 
-cd ngx_pagespeed-${NPS_VERSION}-beta/
+cd incubator-pagespeed-ngx-${NPS_VERSION}/
+
 psol_url=https://dl.google.com/dl/page-speed/psol/${NPS_VERSION}.tar.gz
 [ -e scripts/format_binary_url.sh ] && psol_url=$(scripts/format_binary_url.sh PSOL_BINARY_URL)
 wget ${psol_url}
