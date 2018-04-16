@@ -473,7 +473,7 @@ sudo chmod -R 775 ${MY_SITE_PATH}
 echo "---> Let's cleanup:"
 pause
 cd
-rm -rf master.zip nginx-1.11.5 nginx-1.11.5.tar.gz ngx_pagespeed-master
+rm -rf nginx_install
 
 cd ${MY_SITE_PATH}
 
