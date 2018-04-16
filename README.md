@@ -1,4 +1,4 @@
-LEMP Install for Magento and WordPress
+LEMP Install for Magento and WordPress with Google Pagespeed.
 
 This script is meant to be run on a fresh Ubuntu server with 14,15, or 16.
 
@@ -8,7 +8,7 @@ It will:
 
 2. Install with Pagespeed.
 
-3. Install Php5-fpm 7.
+3. Install Php5-fpm and Php7.1-fpm.
 
 4. Install Percona (MySQL) 5.7.
 
@@ -35,6 +35,7 @@ chmod 550 lemp.sh
 
 
 To add a WordPress site:
+
 cd
 
 wget -q https://raw.githubusercontent.com/dwdonline/lemp/master/add_wp_site.sh
